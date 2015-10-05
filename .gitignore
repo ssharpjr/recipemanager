@@ -1,10 +1,13 @@
 *.pyc
 *.json
 *~
+__pycache__
 
 settings.py
 
 db.sqlite3
+
+/static
 
 *.sublime-project
 *.sublime-workspace
