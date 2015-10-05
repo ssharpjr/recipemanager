@@ -1,0 +1,10 @@
+*.pyc
+*.json
+*~
+
+settings.py
+
+db.sqlite3
+
+*.sublime-project
+*.sublime-workspace
