@@ -1,0 +1,28 @@
+{% extends "recman/base.html" %}
+
+{% block content %}
+
+  	<div class="page-header">
+		<h1>{{ recipe.name }}</h1>
+		<strong>{{ recipe.description }}</strong>
+	</div>
+
+	<div class="recipe-details">
+
+	<strong>Category:</strong> {{ recipe.category }} - {{ recipe.subcategory }}<br />
+	<strong>Prep Time:</strong> {{ recipe.prep_time }} {{ recipe.prep_time_uom }}<br />
+	<strong>Cook Time:</strong> {{ recipe.cook_time }} {{ recipe.cook_time_uom }}<br />
+	<strong>Ready in:</strong> (calculate later)<br />
+	<br />
+	<strong>Ingredients</strong><br />
+	(for loop)<br />
+	<br />
+	<strong>Instructions</strong><br />
+	{{ recipe.instructions }}<br />
+	<br />
+	<strong>Additional Notes</strong><br />
+	{{ recipe.notes }}
+
+	</div>
+
+{% endblock content %}
