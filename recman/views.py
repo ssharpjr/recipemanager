@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Recipe, Recipe_detail
 
@@ -11,10 +11,29 @@ def recipe_list(request):
 
 def recipe_detail(request, pk):
 	recipe = get_object_or_404(Recipe, pk=pk)
-	ready_in = recipe.prep_time + recipe.cook_time
 	return render(request, 'recman/recipe_detail.html', {'recipe': recipe})
 
 def recipe_new(request):
-	form = RecipeForm()
+	if request.method == "POST":
+		form = RecipeForm(request.POST)
+		if form.is_valid():
+			recipe = form.save()
+			# Link any fields that are needed but not on the form (ie. User).
+			recipe.save()
+			return redirect('recman.views.recipe_detail', pk=recipe.pk)
+	else:
+		form = RecipeForm()
 	return render(request, 'recman/recipe_edit.html', {'form': form})
 
+def recipe_edit(request, pk):
+	recipe = get_object_or_404(Recipe, pk=pk)
+	if request.method == "POST":
+		form = RecipeForm(request.POST, instance=recipe)
+		if form.is_valid():
+			recipe = form.save()
+			# Link any fields that are needed but not on the form (ie. User).
+			recipe.save()
+			return redirect('recman.views.recipe_detail', pk=recipe.pk)
+	else:
+		form = RecipeForm(instance=recipe)
+	return render(request, 'recman/recipe_edit.html', {'form': form})

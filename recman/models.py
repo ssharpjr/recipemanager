@@ -52,11 +52,11 @@ class Recipe(models.Model):
 									choices=CAT_CHOICES,
 									default=None)
 	subcategory = models.CharField(max_length=100)
-	prep_time = models.FloatField(max_length=4)
+	prep_time = models.FloatField(max_length=4, blank=True)
 	prep_time_uom = models.CharField(max_length=4,
 									choices=TIME_UOM_CHOICES,
 									default='min')
-	cook_time = models.FloatField(max_length=4)
+	cook_time = models.FloatField(max_length=4, blank=True)
 	cook_time_uom = models.CharField(max_length=4,
 									choices=TIME_UOM_CHOICES,
 									default='min')
@@ -70,41 +70,35 @@ class Recipe(models.Model):
 		prep_time_min = 0
 		cook_time_min = 0
 		time_uom = 'min'
+		hours = 0
+		minutes = 0
 
 		# Convert hours to minutes
 		if self.prep_time_uom == 'hr':
 			prep_time_min = self.prep_time * 60
 		else:
 			prep_time_min = self.prep_time
-
 		if self.cook_time_uom == 'hr':
 			cook_time_min = self.cook_time * 60
 		else:
 			cook_time_min = self.cook_time
-
 		total_time = prep_time_min + cook_time_min
-
 		# Convert to the most reasonable time
 		if total_time >= 60:
 			# If gt 1 hour, use hours and minutes
 			time_uom = 'hrs'
 			hours = total_time // 60
 			minutes = total_time % 60
-
 			if hours == 1:
 				time_uom = 'hr'
-
 		else:
 			time_uom = 'mins'
-			if minutes == 1:
-				time_uom = 'min' # should never happen but just in case
-
 		# Build the output
 		if time_uom == 'hr' or 'hrs':
-			time_output = str("{:g}".format(hours)) + ' ' + time_uom + ', ' + str("{:g}". format(minutes)) + ' mins'
+			time_output = str("{:g}".format(hours)) + ' ' + time_uom + \
+				', ' + str("{:g}". format(minutes)) + ' mins'
 		else:
 			time_output = str("{:g}".format(minutes)) + ' ' + time_uom
-
 		return time_output
 
 

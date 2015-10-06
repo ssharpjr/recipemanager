@@ -8,14 +8,20 @@
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{% static 'recman/styles.css' %}">
     </head>
-
     <body>
-
-    <a href="{% url 'recipe_new' %}" class="top-menu">Add Recipe</a>
-
-        {% block content %}
-        {% endblock %}
-
+        <div class="page-header">
+        {% if user.is_authenticated %}
+            <a href="{% url 'recipe_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+        {% endif %}
+        <h1><a href="/">Recipe Manager</a></h1>
+        </div>
+        <div class="content container">
+            <div class="row">
+                <div class="col-md-8">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
     </body>
-
-    </html>
+</html>

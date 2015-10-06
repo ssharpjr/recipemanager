@@ -1,0 +1,6 @@
+Django workflow.
+1. urls.py - Create url pattern that points to a view.
+2. views.py - Create a view that calls a template and renders the view.
+3. <template>.html - Create a template that displays the view and uses static files.
+4. static files - Create CSS, JS, and images that are used by the template.
+

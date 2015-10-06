@@ -1,33 +1,30 @@
 {% extends "recman/base.html" %}
 
 {% block content %}
-
-  	<div class="page-header">
+	<div class="recipe">
+		{% if user.is_authenticated %}
+			<a class="btn btn-default" href="{% url 'recipe_edit' pk=recipe.pk %}">
+				<span class="glyphicon glyphicon-pencil"></span></a>
+		{% endif %}
 		<h1>{{ recipe.name }}</h1>
-		<strong>{{ recipe.description }}</strong>
+		<strong>{{ recipe.description }}</strong><br />
+		<strong>Category:</strong> {{ recipe.category }} - {{ recipe.subcategory }}<br />
+		<strong>Prep Time:</strong> {{ recipe.prep_time }} {{ recipe.prep_time_uom }}<br />
+		<strong>Cook Time:</strong> {{ recipe.cook_time }} {{ recipe.cook_time_uom }}<br />
+		<strong>Ready in:</strong> {{ recipe.ready_in }}<br />
+		<br />
+		<strong>Ingredients</strong><br />
+		<ul>
+		{% for i in recipe.recipe_detail_set.all %}
+			<li>{{ i.qty }} {{ i.uom }} - {{ i.prep }} {{ i.ingredient.name }}</li>
+		{% endfor %}
+		</ul>
+
+		<br />
+		<strong>Instructions</strong><br />
+		{{ recipe.instructions }}<br />
+		<br />
+		<strong>Additional Notes</strong><br />
+		{{ recipe.notes }}
 	</div>
-
-	<div class="recipe-details">
-
-	<strong>Category:</strong> {{ recipe.category }} - {{ recipe.subcategory }}<br />
-	<strong>Prep Time:</strong> {{ recipe.prep_time }} {{ recipe.prep_time_uom }}<br />
-	<strong>Cook Time:</strong> {{ recipe.cook_time }} {{ recipe.cook_time_uom }}<br />
-	<strong>Ready in:</strong> {{ recipe.ready_in }}<br />
-	<br />
-	<strong>Ingredients</strong><br />
-	<ul>
-	{% for i in recipe.recipe_detail_set.all %}
-		<li>{{ i.qty }} {{ i.uom }} - {{ i.prep }} {{ i.ingredient.name }}</li>
-	{% endfor %}
-	</ul>
-	
-	<br />
-	<strong>Instructions</strong><br />
-	{{ recipe.instructions }}<br />
-	<br />
-	<strong>Additional Notes</strong><br />
-	{{ recipe.notes }}
-
-	</div>
-
 {% endblock content %}
