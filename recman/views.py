@@ -11,8 +11,10 @@ def recipe_list(request):
 
 def recipe_detail(request, pk):
 	recipe = get_object_or_404(Recipe, pk=pk)
+	ready_in = recipe.prep_time + recipe.cook_time
 	return render(request, 'recman/recipe_detail.html', {'recipe': recipe})
 
 def recipe_new(request):
 	form = RecipeForm()
 	return render(request, 'recman/recipe_edit.html', {'form': form})
+

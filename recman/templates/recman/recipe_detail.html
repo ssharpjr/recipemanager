@@ -12,10 +12,15 @@
 	<strong>Category:</strong> {{ recipe.category }} - {{ recipe.subcategory }}<br />
 	<strong>Prep Time:</strong> {{ recipe.prep_time }} {{ recipe.prep_time_uom }}<br />
 	<strong>Cook Time:</strong> {{ recipe.cook_time }} {{ recipe.cook_time_uom }}<br />
-	<strong>Ready in:</strong> (calculate later)<br />
+	<strong>Ready in:</strong> {{ recipe.ready_in }}<br />
 	<br />
 	<strong>Ingredients</strong><br />
-	(for loop)<br />
+	<ul>
+	{% for i in recipe.recipe_detail_set.all %}
+		<li>{{ i.qty }} {{ i.uom }} - {{ i.prep }} {{ i.ingredient.name }}</li>
+	{% endfor %}
+	</ul>
+	
 	<br />
 	<strong>Instructions</strong><br />
 	{{ recipe.instructions }}<br />

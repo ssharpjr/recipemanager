@@ -7,24 +7,24 @@ UOM_CHOICES = (
 	('tps', 'Teaspoons'),
 	('tbs', 'Tablespoons'),
 	('cup', 'Cups'),
-	('wh', 'Whole'),
-	('clv', 'Cloves'),
+	('whole', 'Whole'),
+	('clove', 'Cloves'),
 	)
 
 TIME_UOM_CHOICES = (
-	('min', 'Minutes'),
+	('mins', 'Minutes'),
 	('hr', 'Hours'),
 	)
 
 # TODO: (Model) Make this an editable list.
 CAT_CHOICES = (
-	('BREAKFAST',	'Breakfast'),
-	('ENTREE', 		'Entree'),
-	('SOUP',   		'Soups/Stews'),
-	('DESSERT',		'Dessert'),
-	('SNACK',		'Snack'),
-	('APPETIZER',	'Appetizer'),
-	('BEVERAGE',	'Beverage')
+	('Breakfast',	'Breakfast'),
+	('Entree', 		'Entree'),
+	('Soup',   		'Soups/Stews'),
+	('Dessert',		'Dessert'),
+	('Snack',		'Snack'),
+	('Appetizer',	'Appetizer'),
+	('Beverage',	'Beverage')
 	)
 
 
@@ -34,7 +34,7 @@ class Ingredient(models.Model):
 	description = models.CharField(max_length=100)
 	category = models.CharField(max_length=100)
 	subcategory = models.CharField(max_length=100)
-	uom = models.CharField(max_length=3,
+	uom = models.CharField(max_length=4,
 							choices=UOM_CHOICES,
 							default='oz')
 	qty = models.FloatField(default=0)
@@ -53,11 +53,11 @@ class Recipe(models.Model):
 									default=None)
 	subcategory = models.CharField(max_length=100)
 	prep_time = models.FloatField(max_length=4)
-	prep_time_uom = models.CharField(max_length=3,
+	prep_time_uom = models.CharField(max_length=4,
 									choices=TIME_UOM_CHOICES,
 									default='min')
 	cook_time = models.FloatField(max_length=4)
-	cook_time_uom = models.CharField(max_length=3,
+	cook_time_uom = models.CharField(max_length=4,
 									choices=TIME_UOM_CHOICES,
 									default='min')
 	instructions = models.TextField(blank=True)
@@ -65,6 +65,47 @@ class Recipe(models.Model):
 
 	def __str__(self):
 		return self.name
+
+	def ready_in(self):
+		prep_time_min = 0
+		cook_time_min = 0
+		time_uom = 'min'
+
+		# Convert hours to minutes
+		if self.prep_time_uom == 'hr':
+			prep_time_min = self.prep_time * 60
+		else:
+			prep_time_min = self.prep_time
+
+		if self.cook_time_uom == 'hr':
+			cook_time_min = self.cook_time * 60
+		else:
+			cook_time_min = self.cook_time
+
+		total_time = prep_time_min + cook_time_min
+
+		# Convert to the most reasonable time
+		if total_time >= 60:
+			# If gt 1 hour, use hours and minutes
+			time_uom = 'hrs'
+			hours = total_time // 60
+			minutes = total_time % 60
+
+			if hours == 1:
+				time_uom = 'hr'
+
+		else:
+			time_uom = 'mins'
+			if minutes == 1:
+				time_uom = 'min' # should never happen but just in case
+
+		# Build the output
+		if time_uom == 'hr' or 'hrs':
+			time_output = str("{:g}".format(hours)) + ' ' + time_uom + ', ' + str("{:g}". format(minutes)) + ' mins'
+		else:
+			time_output = str("{:g}".format(minutes)) + ' ' + time_uom
+
+		return time_output
 
 
 
