@@ -8,7 +8,9 @@ UOM_CHOICES = (
 	('tbs', 'Tablespoons'),
 	('cup', 'Cups'),
 	('whole', 'Whole'),
+	('each', 'Each'),
 	('clove', 'Cloves'),
+	('can', 'Can'),
 	)
 
 TIME_UOM_CHOICES = (
@@ -34,7 +36,7 @@ class Ingredient(models.Model):
 	description = models.CharField(max_length=100)
 	category = models.CharField(max_length=100)
 	subcategory = models.CharField(max_length=100)
-	uom = models.CharField(max_length=4,
+	uom = models.CharField(max_length=20,
 							choices=UOM_CHOICES,
 							default='oz')
 	qty = models.FloatField(default=0)
@@ -108,9 +110,9 @@ class Recipe_detail(models.Model):
 	ingredient = models.ForeignKey(Ingredient)
 	prep = models.CharField(max_length=100, blank=True)
 	qty = models.FloatField(default=0)
-	uom = models.CharField(max_length=3,
+	uom = models.CharField(max_length=20,
 							choices=UOM_CHOICES,
-							default='oz')
+							default='each')
 	optional = models.BooleanField()
 	notes = models.CharField(max_length=200, blank=True)
 

@@ -8,7 +8,7 @@
 
 	{% for recipe in recipes %}
 		<div class="recipe">
-			<p><strong>{{ recipe.pk }} <a href="{% url 'recipe_detail' pk=recipe.pk %}">{{ recipe.name }}</a></strong><br />
+			<p><strong><a href="{% url 'recipe_detail' pk=recipe.pk %}">{{ recipe.name }}</a></strong><br />
 			&nbsp;&nbsp;&nbsp;&nbsp;<em>{{ recipe.description }}</em><br />
 			&nbsp;&nbsp;&nbsp;&nbsp;{{ recipe.category }} - {{ recipe.subcategory }}</p>
 		</div>
